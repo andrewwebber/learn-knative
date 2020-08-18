@@ -1,0 +1,13 @@
+#!/bin/sh
+kubectl create namespace kafka
+curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.16.2/strimzi-cluster-operator-0.16.2.yaml" \
+  | sed 's/namespace: .*/namespace: kafka/' \
+  | kubectl -n kafka apply -f -
+kubectl wait deployment strimzi-cluster-operator --for=condition=Available -n kafka
+kubectl apply -n kafka -f ./knative/brokers/kafka.yaml
+kubectl wait kafka events-cluster --for=condition=Ready -n kafka
+curl -L "https://github.com/knative/eventing-contrib/releases/download/v0.17.0/kafka-channel.yaml" \
+ | sed 's/REPLACE_WITH_CLUSTER_URL/events-cluster-kafka-bootstrap.kafka:9092/' \
+ | kubectl apply --filename -
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/v0.17.0/eventing-kafka-broker.yaml
+kubectl get brokers.eventing.knative.dev -o yaml

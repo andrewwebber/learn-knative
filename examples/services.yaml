@@ -1,0 +1,86 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: node-service
+spec:
+  template:
+    spec:
+      containers:
+        - image: andrewwebber/learn-knative-node:v1.0.2
+          ports:
+            - containerPort: 3000
+          env:
+            - name: BROKER
+              value: "http://broker-ingress.knative-eventing.svc.cluster.local/default/default"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: processor-service
+  labels:
+    serving.knative.dev/visibility: cluster-local
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/knative-releases/knative.dev/eventing-contrib/cmd/appender
+          env:
+            - name: MESSAGE
+              value: " - Handled by 0"
+            - name: TYPE
+              value: "processed"
+
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: event-display
+  labels:
+    serving.knative.dev/visibility: cluster-local
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/knative-releases/knative.dev/eventing-contrib/cmd/event_display
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: python-service
+  labels:
+    serving.knative.dev/visibility: cluster-local
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/andrewwebber/learn-knative-python:v1.0.1
+          ports:
+            - containerPort: 3000
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: rust-service
+  labels:
+    serving.knative.dev/visibility: cluster-local
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/andrewwebber/learn-knative-rust:v1.0.7
+          ports:
+            - containerPort: 9000
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: golang-service
+  labels:
+    serving.knative.dev/visibility: cluster-local
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/andrewwebber/learn-knative-golang:v1.0.3
+          ports:
+            - containerPort: 8080

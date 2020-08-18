@@ -1,0 +1,83 @@
+#!/bin/sh
+kubectl apply --filename - << END
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: on-processed-event-display
+spec:
+  broker: default
+  subscriber:
+    ref:
+     apiVersion: v1
+     kind: Service
+     name: event-display
+END
+
+kubectl apply --filename - << END
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: on-process-request
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: node.request
+  subscriber:
+    ref:
+     apiVersion: v1
+     kind: Service
+     name: processor-service
+END
+
+kubectl apply --filename - << END
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: on-processed-event-python
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: processed
+  subscriber:
+    ref:
+     apiVersion: v1
+     kind: Service
+     name: python-service
+END
+
+
+kubectl apply --filename - << END
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: on-processed-event-golang
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: processed
+  subscriber:
+    ref:
+     apiVersion: v1
+     kind: Service
+     name: golang-service
+END
+
+kubectl apply --filename - << END
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: on-processed-event-rust
+spec:
+  broker: default
+  filter:
+    attributes:
+      source: https://go-service
+  subscriber:
+    ref:
+     apiVersion: v1
+     kind: Service
+     name: rust-service
+END

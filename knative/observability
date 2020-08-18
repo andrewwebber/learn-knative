@@ -1,0 +1,3 @@
+#!/bin/sh
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-core.yaml
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-metrics-prometheus.yaml
