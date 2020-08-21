@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Example {
+    #[serde(rename(serialize = "id", deserialize = "id"))]
     sequence: u8,
     message: String,
 }
@@ -21,16 +22,13 @@ async fn reply_event(
 ) -> Result<HttpResponse, actix_web::Error> {
     let request_event = req.into_event(payload).await?;
 
-    if let Ok(data) = request_event.try_get_data() {
+    if let Ok(data) = request_event.try_get_data::<serde_json::Value>() {
         if let Some(data_inner) = data {
-            if let Ok(e) = serde_json::from_value::<Example>(data_inner) {
-                info!("Payload: {:?}", e);
+            if let Ok(ex) = serde_json::from_value::<Example>(data_inner) {
+                info!("Event Data {:?}", ex);
             }
         }
     }
-
-    let data: serde_json::Value = request_event.try_get_data().unwrap().unwrap();
-    info!("Event data: {}", data);
 
     // Build response event cloning the original event and setting the new type and source
     let response_event = EventBuilderV10::from(request_event)

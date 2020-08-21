@@ -55,10 +55,10 @@
     ```bash
     kubectl get pods
     kubectl logs -l serving.knative.dev/service=rust-service -c user-container -f
-    [2020-08-21T18:08:29Z INFO  actix_server::builder] Starting 1 workers
-    [2020-08-21T18:08:29Z INFO  actix_server::builder] Starting "actix-web-service-127.0.0.1:9000" service on 127.0.0.1:9000
-    [2020-08-21T18:08:32Z INFO  rust_service] Received Event: Event { attributes: V10(Attributes { id: "6412f4cd-bff3-446e-89e6-2276f4e4e677", ty: "reply.to", source: "https://go-service/", datacontenttype: Some("application/json"), dataschema: None, subject: None, time: Some(2020-08-21T18:08:29.079284202Z) }), data: Some(Binary([123, 34, 105, 100, 34, 58, 57, 57, 44, 34, 109, 101, 115, 115, 97, 103, 101, 34, 58, 34, 104, 101, 108, 108, 111, 32, 102, 114, 111, 109, 32, 110, 111, 100, 101, 45, 115, 101, 114, 118, 105, 99, 101, 32, 45, 32, 72, 97, 110, 100, 108, 101, 100, 32, 98, 121, 32, 48, 32, 45, 32, 104, 101, 108, 108, 111, 32, 102, 114, 111, 109, 32, 103, 111, 45, 115, 101, 114, 118, 105, 99, 101, 34, 125])), extensions: {"knativehistory": String("default-kne-trigger-kn-channel.default.svc.cluster.local"), "knativearrivaltime": String("2020-08-21T18:08:29.080334597Z")} }
-    [2020-08-21T18:08:32Z INFO  actix_web::middleware::logger] 10.244.0.9 "POST / HTTP/1.1" 200 84 "-" "Go-http-client/1.1" 0.000178
+    [2020-08-21T20:23:42Z INFO  rust_service] Starting rust-service
+    [2020-08-21T20:23:42Z INFO  actix_server::builder] Starting 1 workers
+    [2020-08-21T20:23:42Z INFO  actix_server::builder] Starting "actix-web-service-127.0.0.1:9000" service on 127.0.0.1:9000
+    [2020-08-21T20:23:56Z INFO  rust_service] Event Data Example { sequence: 99, message: "hello from node-service - Handled by 0 - hello from go-service" }
     ```
 5. Inspect monitoring dashboard
 

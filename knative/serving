@@ -1,5 +1,5 @@
 #!/bin/sh
 kubectl apply -f https://github.com/knative/serving/releases/download/v0.17.0/serving-crds.yaml
 kubectl apply -f https://github.com/knative/serving/releases/download/v0.17.0/serving-core.yaml
-kubectl wait deployment activator autoscaler controller webhook --for=condition=Available -n knative-serving
+kubectl wait --timeout=60s deployment activator autoscaler controller webhook --for=condition=Available -n knative-serving
 kubectl get pods -n knative-serving

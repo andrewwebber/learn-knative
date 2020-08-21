@@ -1,10 +1,3 @@
 #!/bin/sh
-curl -v "http://broker-ingress.knative-eventing.svc.cluster.local/default/default" \ 
-  -X POST \ 
-  -H "Ce-Id: say-hello" \ 
-  -H "Ce-Specversion: 1.0" \ 
-  -H "Ce-Type: greeting" \ 
-  -H "Ce-Source: https://external" \ 
-  -H "Content-Type: application/json" \ 
-  -d '{"message":"Hello Knative!"}'
+curl -v "http://node-service.default.127.0.0.1.nip.io" -d '{}'
 
