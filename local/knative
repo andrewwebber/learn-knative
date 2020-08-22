@@ -1,0 +1,8 @@
+#!/bin/sh
+./knative/serving
+./knative/networking/kourier
+./knative/eventing
+./knative/brokers/in-memory
+./knative/observability
+echo "Ignore Istio warnings 🔧"
+echo "Installation finished 🎈🎈🎈"
