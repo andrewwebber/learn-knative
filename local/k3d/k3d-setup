@@ -1,0 +1,2 @@
+#!/bin/sh
+k3d cluster create local-cluster -p 80:31080@loadbalancer --k3s-server-arg --no-deploy --k3s-server-arg traefik

@@ -18,6 +18,13 @@ sequenceDiagram
 
 ## Prerequisites
 
+### Kubernetes Distro
+
+This project provides scripts for setting up Knative using either of the following distros
+
+- [Kind](https://kind.sigs.k8s.io/)
+- [k3d](https://k3d.io/)
+
 ### Apple Mac OSX
 
 - Docker for Mac
@@ -29,6 +36,7 @@ sequenceDiagram
   ```bash
   brew install kubectl
   brew install kind
+  brew install k3d
   brew install istioctl
   brew install helm
   ```
@@ -43,16 +51,25 @@ sequenceDiagram
   ```bash
   yay kubectl
   yay kind
+  yay rancher-k3d-bin
   yay istio
   yay helm
   ```
 
 ## Getting started
 
-```bash
-./local/dev
+Select Kubernetes Distro
 
-```
+- Kind
+    ```bash
+    ./local/dev-kind
+
+    ```
+- k3ds
+    ```bash
+    ./local/dev-k3ds
+
+    ```
 
 ## Examples
 

@@ -1,3 +1,52 @@
 #!/bin/sh
 kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-core.yaml
 kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-metrics-prometheus.yaml
+NAMESPACE=${NAMESPACE:-default}
+helm repo add loki https://grafana.github.io/loki/charts
+helm repo update
+helm upgrade --install -n $NAMESPACE loki loki/loki-stack  -f - << END
+loki:
+  enabled: true
+  config:
+    auth_enabled: false
+
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url : http://loki:3100/loki/api/v1/push
+        tenant_id: "loki"
+        # Maximum wait period before sending batch
+        batchwait: 1s
+        # Maximum batch size to accrue before sending, unit is byte
+        batchsize: 102400
+        # Maximum time to wait for server to respond to a request
+        timeout: 10s
+        backoff_config:
+          # Initial backoff time between retries
+          min_period: 100ms
+          # Maximum backoff time between retries
+          max_period: 5s
+          # Maximum number of retries when sending batches, 0 means infinite retries
+          max_retries: 20
+        # The labels to add to any time series or alerts when communicating with loki
+        external_labels: {platform: loki}
+
+fluent-bit:
+  enabled: false
+
+grafana:
+  enabled: false
+  sidecar:
+    datasources:
+      enabled: true
+  image:
+    # tag: 6.7.0
+    tag: 7.1.2
+
+prometheus:
+  enabled: false
+
+END
+
+kubectl set image deploy -n knative-monitoring grafana grafana=grafana/grafana:7.1.2

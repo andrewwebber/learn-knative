@@ -1,0 +1,3 @@
+#!/bin/sh
+./local/k3d/k3d-setup
+./local/knative
