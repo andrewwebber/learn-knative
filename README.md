@@ -1,4 +1,20 @@
-# Learning Knative
+# Learning Knative - Quickstart
+
+# Introduction
+
+The outcome of this exercise is a setup where services written in multiple languages get auto-scaled as [cloudevents](https://cloudevents.io/) arrive.
+
+
+```mermaid
+sequenceDiagram
+    Curl->>NodeService: Post data
+    NodeService->>KnativeBroker: Post ☁  cloudevent
+    KnativeBroker->>Processor: Relay ☁  cloudevent
+    Processor->>KnativeBroker: Append ☁  cloudevent
+    KnativeBroker->>GolangService: Relay ☁  cloudevent
+    KnativeBroker->>PythonService: Relay ☁  cloudevent
+    KnativeBroker->>RustService: Relay ☁  cloudevent
+```
 
 ## Prerequisites
 
