@@ -1,10 +1,12 @@
 #!/bin/sh
 kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-core.yaml
 kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-metrics-prometheus.yaml
-NAMESPACE=${NAMESPACE:-default}
+echo "Ignore Istio warnings 🔧"
+LOKI_NAMESPACE=${LOKI_NAMESPACE:-loki}
+kubectl create ns $LOKI_NAMESPACE
 helm repo add loki https://grafana.github.io/loki/charts
 helm repo update
-helm upgrade --install -n $NAMESPACE loki loki/loki-stack  -f - << END
+helm upgrade --install -n $LOKI_NAMESPACE loki loki/loki-stack  -f - << END
 loki:
   enabled: true
   config:
@@ -49,4 +51,26 @@ prometheus:
 
 END
 
+LOKI_DATASOURCE=$(cat << END
+apiVersion: v1
+data:
+  prometheus.yaml: |
+    datasources:
+     - name: prometheus
+       type: prometheus
+       access: proxy
+       org_id: 1
+       url: http://prometheus-system-np:8080
+       version: 1
+       editable: false
+     - name: loki
+       type: loki
+       url: loki-headless.loki:3100
+       access: proxy
+       jsonData:
+         maxLines: 1000
+END
+)
+
+kubectl patch cm -n knative-monitoring grafana-datasources --patch "<<< $LOKI_DATASOURCE"
 kubectl set image deploy -n knative-monitoring grafana grafana=grafana/grafana:7.1.2

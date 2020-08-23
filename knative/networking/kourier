@@ -1,6 +1,7 @@
 #!/bin/sh
 kubectl apply -f https://github.com/knative/net-kourier/releases/download/v0.17.0/kourier.yaml
-kubectl wait --timeout=60s deployment 3scale-kourier-control 3scale-kourier-gateway --for=condition=Available -n kourier-system
+echo "⏳ waiting for kourier ingress system to become healthy"
+kubectl wait --timeout=120s deployment 3scale-kourier-control 3scale-kourier-gateway --for=condition=Available -n kourier-system
 EXTERNAL_IP="127.0.0.1"
 KNATIVE_DOMAIN="$EXTERNAL_IP.nip.io"
 echo KNATIVE_DOMAIN=$KNATIVE_DOMAIN

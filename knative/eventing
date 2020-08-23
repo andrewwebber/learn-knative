@@ -4,5 +4,6 @@ kubectl apply --filename https://github.com/knative/eventing/releases/download/v
 kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/in-memory-channel.yaml
 kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/mt-channel-broker.yaml
 kubectl get pods --namespace knative-eventing
-kubectl wait --timeout=60s deployment eventing-webhook --for=condition=Available -n knative-eventing
+echo "⏳ waiting for knative-eventing to become healthy"
+kubectl wait --timeout=120s deployment eventing-webhook --for=condition=Available -n knative-eventing
 

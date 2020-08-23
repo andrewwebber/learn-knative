@@ -3,8 +3,12 @@ kubectl create namespace kafka
 curl -L "https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.16.2/strimzi-cluster-operator-0.16.2.yaml" \
   | sed 's/namespace: .*/namespace: kafka/' \
   | kubectl -n kafka apply -f -
+
+echo "⏳ waiting for kafka operator to become healthy"
 kubectl wait --timeout=60s deployment strimzi-cluster-operator --for=condition=Available -n kafka
 kubectl apply -n kafka -f ./knative/brokers/kafka.yaml
+
+echo "⏳ waiting for kafka cluster to become healthy"
 kubectl wait --timeout=60s kafka events-cluster --for=condition=Ready -n kafka
 curl -L "https://github.com/knative/eventing-contrib/releases/download/v0.17.0/kafka-channel.yaml" \
  | sed 's/REPLACE_WITH_CLUSTER_URL/events-cluster-kafka-bootstrap.kafka:9092/' \
