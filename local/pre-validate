@@ -1,0 +1,35 @@
+#!/bin/sh
+CPU_COUNT=`lscpu | grep 'CPU(s):' | awk '{print $2;exit;}'`
+CPU_COUNT_REQUIRED=8
+if [[ "$CPU_COUNT" -lt "$CPU_COUNT_REQUIRED" ]];then
+  echo "Found $CPU_COUNT CPUs. Machine minimum requirements not met. Require at least $CPU_COUNT_REQUIRED CPUs"
+  exit 1
+fi
+
+MEM_COUNT=`free --giga | grep Mem | awk '{print $2; exit;}'`
+MEM_COUNT_REQUIRED=16
+if [[ "$MEM_COUNT" -lt "$MEM_COUNT_REQUIRED" ]];then
+  echo "Found $MEM_COUNT GB of RAM. Machine minimum requirements not met. Require at least $MEM_COUNT_REQUIRED GB of RAM"
+  exit 1
+fi
+
+if ! [[ -x "$(command -v kubectl)" ]]; then
+    echo "Please install kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)"
+    exit 1
+fi
+if ! [[ -x "$(command -v helm)" ]]; then
+    echo "Please install helm (https://helm.sh/docs/intro/install/)"
+    exit 1
+fi
+if ! [[ -x "$(command -v k3d)" ]]; then
+    echo "Please install k3d (https://k3d.io/)"
+    exit 1
+fi
+if ! [[ -x "$(command -v istioctl)" ]]; then
+    echo "Please install istioctl (https://istio.io/latest/docs/reference/commands/istioctl/)"
+    exit 1
+fi
+if ! [[ -x "$(command -v kind)" ]]; then
+    echo "Please install Kind (https://kind.sigs.k8s.io/)"
+    exit 1
+fi
