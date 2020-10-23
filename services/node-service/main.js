@@ -23,7 +23,7 @@ const event = new CloudEvent({
 });
 
 app.get("/", (req, res) => {
-    res.status(200).json(data);
+    res.status(200).json(process.env);
 });
 
 app.post("/", (req, res) => {
