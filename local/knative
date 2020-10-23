@@ -1,8 +1,13 @@
-#!/bin/sh
+#!/bin/sh -e
+NETWORKING=${NETWORKING:-kourier}
+BROKER=${BROKER:-in-memory}
+EXTERNAL_IP=${EXTERNAL_IP:-127.0.0.1}
+
 ./knative/serving
-./knative/networking/kourier
+./knative/networking/${NETWORKING}
+KNATIVE_DOMAIN="$EXTERNAL_IP.nip.io"
+echo KNATIVE_DOMAIN=$KNATIVE_DOMAIN
+kubectl patch configmap -n knative-serving config-domain -p "{\"data\": {\"$KNATIVE_DOMAIN\": \"\"}}"
 ./knative/eventing
-./knative/brokers/in-memory
+./knative/brokers/${BROKER}
 ./knative/observability
-echo "Ignore Istio warnings 🔧"
-echo "Installation finished 🎈🎈🎈"

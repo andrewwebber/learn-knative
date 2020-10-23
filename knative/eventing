@@ -1,8 +1,6 @@
-#!/bin/sh
-kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/eventing-crds.yaml
-kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/eventing-core.yaml
-kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/in-memory-channel.yaml
-kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.17.0/mt-channel-broker.yaml
+#!/bin/sh -e
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-core.yaml
 kubectl get pods --namespace knative-eventing
 echo "⏳ waiting for knative-eventing to become healthy"
 kubectl wait --timeout=120s deployment eventing-webhook --for=condition=Available -n knative-eventing

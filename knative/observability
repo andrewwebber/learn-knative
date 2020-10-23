@@ -1,9 +1,11 @@
 #!/bin/sh
-kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-core.yaml
-kubectl apply --filename https://github.com/knative/serving/releases/download/v0.17.0/monitoring-metrics-prometheus.yaml
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.18.0/monitoring-core.yaml
+kubectl apply --filename https://github.com/knative/serving/releases/download/v0.18.0/monitoring-metrics-prometheus.yaml
 echo "Ignore Istio warnings 🔧"
+
+set -e
 LOKI_NAMESPACE=${LOKI_NAMESPACE:-loki}
-kubectl create ns $LOKI_NAMESPACE
+kubectl create ns $LOKI_NAMESPACE || true
 helm repo add loki https://grafana.github.io/loki/charts
 helm repo update
 helm upgrade --install -n $LOKI_NAMESPACE loki loki/loki-stack  -f - << END
@@ -74,3 +76,6 @@ END
 
 kubectl patch cm -n knative-monitoring grafana-datasources --patch "<<< $LOKI_DATASOURCE"
 kubectl set image deploy -n knative-monitoring grafana grafana=grafana/grafana:7.1.2
+echo "Ignore Istio warnings 🔧"
+kubectl wait --timeout=300s pod -n loki loki-0 --for=condition=Ready
+

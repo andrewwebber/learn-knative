@@ -1,2 +1,2 @@
-#!/bin/sh
+#!/bin/sh -e
 kind create cluster --name local-cluster --config ./local/kind/kind.yaml

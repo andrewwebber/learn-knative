@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/sh -e
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/in-memory-channel.yaml
+kubectl apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/mt-channel-broker.yaml
 kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Broker

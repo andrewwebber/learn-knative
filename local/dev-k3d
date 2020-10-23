@@ -1,3 +1,10 @@
-#!/bin/sh
+#!/bin/sh -e
+NETWORKING=${NETWORKING:-kourier}
+BROKER=${BROKER:-in-memory}
+
+k3d cluster delete local-cluster || echo "no local-cluster to delete 🤷🏻"
+./local/pre-validate
 ./local/k3d/k3d-setup
-./local/knative
+NETWORKING=${NETWORKING} BROKER=${BROKER} ./local/knative
+./knative/observability
+echo "Installation finished 🎈🎈🎈"

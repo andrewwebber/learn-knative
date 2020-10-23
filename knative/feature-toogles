@@ -1,0 +1,16 @@
+#!/bin/sh -e
+ENABLE_FEATURES=$(cat << END
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: config-features
+ namespace: knative-serving
+data:
+ kubernetes.podspec-affinity: enabled
+ kubernetes.podspec-nodeselector: enabled
+ kubernetes.podspec-tolerations: enabled
+END
+)
+
+kubectl patch cm -n knative-serving config-features --patch "<<< $ENABLE_FEATURES"
+

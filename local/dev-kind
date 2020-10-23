@@ -1,3 +1,9 @@
-#!/bin/sh
+#!/bin/sh -e
+NETWORKING=${NETWORKING:-kourier}
+BROKER=${BROKER:-kafka}
+
+kind delete cluster --name=local-cluster || echo "no local-cluster to delete 🤷🏻"
+./local/pre-validate
 ./local/kind/kind-setup
-./local/knative
+NETWORKING=${NETWORKING} BROKER=${BROKER} ./local/knative
+echo "Installation finished 🎈🎈🎈"
