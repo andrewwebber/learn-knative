@@ -1,5 +1,12 @@
 # Learning Knative - Quickstart
 
+Local Knative dev environment
+
+- Kourier or Istio
+- Kafka or in-memory broker
+- Kind or K3D
+- Loki observability
+
 # Introduction
 
 The outcome of this exercise is a setup where services written in multiple languages get auto-scaled as [cloudevents](https://cloudevents.io/) arrive.
@@ -14,6 +21,7 @@ sequenceDiagram
     KnativeBroker->>GolangService: Relay ☁  cloudevent
     KnativeBroker->>PythonService: Relay ☁  cloudevent
     KnativeBroker->>RustService: Relay ☁  cloudevent
+    KnativeBroker->>DenoService: Relay ☁  cloudevent
 ```
 -->
 ![sequence-diagram](./docs/images/sequence-diagram.png)
